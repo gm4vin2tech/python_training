@@ -1,0 +1,3 @@
+git commit issue regarding another process is running :
+https://stackoverflow.com/questions/38004148/another-git-process-seems-to-be-running-in-this-repository
+rm -f .git/index.lock #in git bash in windows
