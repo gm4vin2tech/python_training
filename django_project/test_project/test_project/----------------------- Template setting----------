@@ -1,19 +1,114 @@
------------------------ Template setting------------------------------------------------------------
-TEMPLATES = [
-    {
-        
-        'DIRS': [os.path.join(BASE_DIR,'templates')], # this is your template folder path.
-        
-    },
+1.create an app in project folder
+python manage.py startapp myapp 
+
+2.get the project in INSTALLED_APPS tuple in settings.py
+
+3.sample view
+#displaying text using HttpRespone
+from django.http import HttpResponse
+def hello(request):
+   text = """<h1>welcome to my app !</h1>"""
+   return HttpResponse(text)
+
+#rendering template
+from django.shortcuts import render
+def hello(request):
+   return render(request, "myapp/templates/hello.html", {})
+
+#different types of rendering template
+text = """<h1>welcome to my app !</h1>"""
+return HttpResponse(text)
+
+return render(request, "hello.html")
+
+return render(request, "hello.html", {})
+
+return render(request, "hello.html", {'name': 'Gowthami Manjunatha', 'number': 'number'})
+
+4.In template, can access the parameters/arguments through DTL syntax: #templates.hello.html
+<h1>Hi, welcome {{name}} </h1>
+
+5. url mapping
+from django.contrib import admin
+from django.urls import path
+from .views import home, demo
+from testapp.views import que
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', home, name="home" ),
+    path('demo', demo, name="demo" ),
+    path('que', que, name="que" ),
 ]
 
+6. run server
+python manage.py runserver
+http://127.0.0.1/hello
+
+7.DTL #templates/hello.html
+
+<p>Today is {{today}}</p> #var
+<p>Today is {{name|upper}}</p> #filter for string
+
+#tag - if , for
+
+<html>
+    <head>
+        <title>Hello World</title>
+    </head>
+    <body> 
+
+      Hello World!!!<p>Today is {{today}}</p>
+      We are
+      {% if today.day == 1 %}
+      the first day of month.
+      {% elif today.day == 30 %}
+      the last day of month.
+      {% else %}    
+      I don't know.
+      {%endif%}  
+
+      <p>
+        {% for day in days_of_week %}
+            {{day}} 
+
+        {% endfor %}
+      </p>
+
+   </body>
+</html>
 
 
--------------------------------------------------------------------------------------------------------
+8.static - css, js, img
+    <head>
+        <title>Hello World
+        </title>
+        {% load static  %}
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">  
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>  
 
+        <!-- <script src="{% static 'js/script.js' %}"> </script> -->
+        <!-- <link href="{% static 'css/style.css' %}" rel="stylesheet">  -->
+    </head>
 
+    <body>
+      <img src='{% static "image/download.jpg" %}'/>
+    </body>
 
--------------------------------static files--------------------------------------------------------------
+#script.js
+alert("Hello, Welcome to Gowthami");
+
+#style.css
+h1{  
+color:red;  
+}     
+p{  
+color:blue;  
+}     
+
+#keep image in image folder of static
+
+#settings for static #settings.py
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
@@ -22,50 +117,20 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR,'assets') #this is you assets folder.
 
----------------------------------------------------------------------------------------------------------
-
-
-
-
----------------------------------------media-----------------------------------------------------------
-MEDIA_URL ='/media/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-------------------------------configure static and media files to urls-------------------------------
+#settings for static in urls.py
 from django.conf.urls.static import static
-from django.conf import  settings
+from django.conf import settings
+
+from .views import home, demo
+from myapp.views import hello
+
+urlpatterns = [
+    path('hello', hello, name="hello")
+]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
-if settings.DEBUG:
-    
-    urlpatterns  += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
--------------------------------------------------------------------------------------------------------
+9.Note:  Before accessing static files, needs to run python manage.py collectstatic in project folder
 
---------------------------------data base--------------------------------------------------------------
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'DB_NAME', # Database name
-        'USER': 'DB_USER',
-        'PASSWORD': 'DB_PASSWORD',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
-    }
-}
-
-
-
-
-
----------------------------------time zone-------------------------------------------------------------
-TIME_ZONE =  'Asia/Kolkata'
--------------------------------------------------------------------------------------------------------
+10.download bootstrap and extract and copy and paste of css, js folder in project and link in html files
