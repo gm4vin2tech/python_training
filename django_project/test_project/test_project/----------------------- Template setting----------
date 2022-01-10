@@ -134,3 +134,36 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 9.Note:  Before accessing static files, needs to run python manage.py collectstatic in project folder
 
 10.download bootstrap and extract and copy and paste of css, js folder in project and link in html files
+
+
+#########################************db setup*******************###############################
+1. Open pgadmin and create db
+Note: databse_name, username and password
+
+2. Install db and django connecting package
+pip install psycopg2
+ 
+4. Configuration for db in settings.py
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'sample-django-proj',
+        'USER': 'postgres',
+        'PASSWORD': '12345678',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+4. Write code in models.py, eg:
+class Teacher(models.Model):
+   name = models.CharField(max_length=80)
+  age = models.IntegerField()
+
+5. make sure spefied models.py app should be in Installed_Apps of settings.py (needs to get specific module)
+
+6. python manage.py makemigrations #to make migrations whic are specified in models.py
+
+7. python manage.py migrate #to run migrations to get similarity/update to db
+
+7. verify db table in pgadmin
