@@ -20,7 +20,7 @@ from django.conf import settings
 
 from .views import home, demo
 from testapp.views import que
-from myapp.views import hello
+from myapp.views import hello, head, add, index
 
 
 urlpatterns = [
@@ -28,7 +28,10 @@ urlpatterns = [
     path('', home, name="home" ),
     path('demo', demo, name="demo" ),
     path('que', que, name="que" ),
-    path('hello', hello, name="hello")
+    path('hello', hello, name="hello"),
+    path('head', head, name="head" ),
+    path('add', add, name="add" ),
+    path('index', index, name="index"),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
